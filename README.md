@@ -100,6 +100,132 @@ A aplicação inclui testes unitários e de integração desenvolvidos com **xUn
 ### Arquitetura: 
 ![Arquitetura](images/Carrefour.jpg)
 
+---
+
+## 1. Desenho da Solução da Arquitetura de Transição (Migração de Legado)
+
+### Contexto:
+
+Se estamos migrando de um sistema legado, o principal objetivo é garantir a continuidade dos negócios durante a transição para a nova arquitetura. A arquitetura de transição deve fornecer suporte tanto ao sistema legado quanto ao novo sistema até que a migração seja concluída.
+
+### Solução Proposta:
+
+- **Arquitetura Híbrida (Coexistência)**:
+  - Durante o processo de migração, propomos uma arquitetura que permita a coexistência do sistema legado e do novo sistema baseado em microsserviços.
+  - O **sistema legado** continuará lidando com dados antigos e operações críticas que ainda não foram migradas.
+  - O **novo sistema de microsserviços** será implementado em paralelo, sendo integrado por meio de APIs para consolidar dados e gerar relatórios financeiros.
+
+- **Sincronização de Dados**:
+  - Será necessário um middleware que sincronize os dados entre o sistema legado e o novo sistema para garantir a consistência nas transações financeiras até que todo o sistema esteja completamente migrado.
+
+- **Migração Gradual**:
+  - Os módulos mais críticos, como o controle de lançamentos, seriam os primeiros a ser migrados, enquanto a consolidação diária pode ser mantida no legado por mais tempo, até que a estabilidade do novo sistema esteja assegurada.
+
+- **APIs Unificadas**:
+  - Para garantir a interoperabilidade entre o legado e a nova plataforma, podemos usar um gateway API que sirva tanto para os serviços novos quanto para os antigos, proporcionando uma transição gradual e sem interrupção dos serviços.
+
+---
+
+## 2. Estimativa de Custos com Infraestrutura e Licenças
+
+### Custos de Infraestrutura:
+
+- **Serviços de Nuvem** (Azure, AWS, Oracle Cloud):
+  - **Servidores de Aplicação (VMs ou serviços gerenciados)**: Entre $100 a $500/mês por servidor.
+  - **Armazenamento de Dados (SQL Server na nuvem)**: Entre $50 a $200/mês, dependendo da necessidade de replicação e backup.
+  - **Serviços de Balanceamento de Carga**: Custo adicional de $20 a $100/mês.
+  - **Monitoramento e Logs**: Entre $10 a $50/mês, dependendo do volume de logs gerados.
+
+### Custos com Licenças:
+
+- **SQL Server**: Licenciamento por núcleo ou instância, variando de $2000 a $7000 por ano.
+- **ASP.NET Core**: Open-source, sem custos diretos de licenciamento.
+- **Entity Framework Core**: Também open-source, sem custos diretos.
+- **Ferramentas de Observabilidade e Monitoramento**: **Datadog** ou **NewRelic** variam de $30 a $200/mês, dependendo do número de hosts monitorados.
+
+---
+
+## 3. Monitoramento e Observabilidade
+
+### Ferramentas e Práticas Recomendadas:
+
+- **Logging Centralizado**:
+  - Usar **Serilog** para capturar logs e armazená-los em serviços como **Elasticsearch**, ou soluções nativas da nuvem (AWS CloudWatch, Azure Monitor).
+
+- **Monitoramento de Aplicação**:
+  - Utilizar **APM** (Application Performance Monitoring) como **NewRelic**, **Datadog** ou **Prometheus/Grafana** para monitorar a saúde do sistema, tempos de resposta e falhas.
+
+- **Monitoramento de Banco de Dados**:
+  - Implementar monitoramento de consultas SQL para detectar e otimizar consultas demoradas ou ineficientes.
+
+- **Alertas em Tempo Real**:
+  - Configurar alertas automáticos para notificar a equipe de suporte quando certos limites críticos forem ultrapassados (ex.: utilização de CPU, falhas de transação ou queda de serviço).
+
+### Observabilidade:
+
+- **Tracing**:
+  - Implementar tracing com **OpenTelemetry** para visualizar como as requisições fluem entre diferentes microsserviços e identificar gargalos de performance.
+
+- **Dashboards**:
+  - Criar dashboards em ferramentas como **Grafana**, **AWS CloudWatch**, ou **Azure Monitor** para acompanhar KPIs críticos, como tempo de resposta e taxa de erros.
+
+---
+
+## 4. Critérios de Segurança para Consumo (Integração) de Serviços
+
+### Práticas de Segurança Recomendadas:
+
+- **Autenticação e Autorização via OAuth2 e OpenID Connect**:
+  - Implementar **OAuth2** com tokens **JWT** para garantir que apenas clientes autenticados possam acessar os serviços.
+
+- **Criptografia**:
+  - As comunicações entre os serviços devem ser criptografadas usando **TLS 1.2+**.
+
+- **Rate Limiting**:
+  - Implementar **rate limiting** e **throttling** nos gateways de API para proteger contra ataques de negação de serviço (DoS).
+
+- **Auditoria**:
+  - Todas as requisições aos serviços críticos devem ser auditadas, permitindo a rastreabilidade de qualquer ação realizada no sistema.
+
+- **WAF (Web Application Firewall)**:
+  - Utilizar um WAF para proteger contra ataques como **SQL Injection**, **XSS** e força bruta.
+
+---
+
+## 5. Requisitos Não Funcionais
+
+- **Alta Disponibilidade**:
+  - O serviço de controle de lançamentos será independente do sistema de consolidação diária. Mesmo que o sistema de consolidação caia, os lançamentos continuarão sendo registrados.
+
+- **Escalabilidade**:
+  - O sistema de consolidação será capaz de suportar até 50 requisições por segundo durante picos.
+
+### Soluções de Escalabilidade:
+
+- **Auto Scaling**: Implementação de **auto-scaling** nas instâncias, garantindo que mais servidores sejam alocados automaticamente durante picos de demanda.
+- **Fila de Mensagens**: Utilizar serviços de fila como **AWS SQS** ou **Azure Service Bus** para processar requisições de maneira assíncrona.
+- **Cache**: Implementar um cache distribuído (ex.: **Redis** ou **Memcached**) para reduzir a carga do sistema e aumentar a velocidade de resposta.
+
+---
+
+## 6. Observações e Evoluções Futuras
+
+### Evoluções Futuras:
+
+- **Integração com Sistemas de Pagamento**:
+  - O sistema pode ser estendido para integrar sistemas de pagamento e bancos, permitindo a automação do recebimento de créditos.
+
+- **Relatórios Avançados**:
+  - Além dos relatórios diários, relatórios semanais, mensais e previsões de fluxo de caixa com base em **inteligência artificial** podem ser introduzidos.
+
+- **Migração Completa para Microsserviços**:
+  - Após a migração completa do sistema legado, a arquitetura pode ser modularizada ainda mais, dividindo os serviços de relatórios, lançamentos e autenticação em microsserviços independentes.
+
+- **Testes de Stress e Carga**:
+  - Implementar testes contínuos de carga e stress para garantir a performance sob diferentes condições, além de monitoramento em tempo real das métricas de uso.
+
+
+
 ### Configuração do Banco de Dados:
 
 1. Certifique-se de que você tem o **SQL Server** ou o **LocalDB** rodando em sua máquina.
