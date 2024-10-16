@@ -89,7 +89,36 @@ A aplicação inclui testes unitários e de integração desenvolvidos com **xUn
 
 - **Serviço de Lançamentos**: Verificação da inserção, listagem e exclusão de lançamentos.
 - **Serviço de Consolidação Diária**: Verificação da geração correta do relatório consolidado.
+---
+## Configuração do Banco de Dados
 
+### Pré-requisitos:
+
+- **.NET 6.0 SDK** ou superior.
+- **SQL Server** (ou **SQL Server LocalDB**) instalado.
+
+### Configuração do Banco de Dados:
+
+1. Certifique-se de que você tem o **SQL Server** ou o **LocalDB** rodando em sua máquina.
+
+2. Abra o arquivo `appsettings.json` e configure a string de conexão conforme necessário. Se estiver usando **LocalDB**, a string de conexão pode ser algo como:
+
+   ```json
+   {
+     "ConnectionStrings": {
+       "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=CashFlowManagerEQS;Trusted_Connection=True;MultipleActiveResultSets=true"
+     }
+   }
+   
+```bash
+dotnet ef migrations add InitialCreate
+dotnet ef migrations add CreateLancamentosTable
+dotnet ef database update
+dotnet restore
+dotnet run
+
+Acesse a aplicação no navegador em http://localhost:5000
+--
 ### Como executar os testes:
 
 Para rodar os testes localmente, utilize o seguinte comando:
