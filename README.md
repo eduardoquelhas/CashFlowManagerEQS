@@ -97,6 +97,9 @@ A aplicação inclui testes unitários e de integração desenvolvidos com **xUn
 - **.NET 6.0 SDK** ou superior.
 - **SQL Server** (ou **SQL Server LocalDB**) instalado.
 
+### Arquitetura: 
+![Arquitetura](images/Carrefour.jpg)
+
 ### Configuração do Banco de Dados:
 
 1. Certifique-se de que você tem o **SQL Server** ou o **LocalDB** rodando em sua máquina.
