@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CashFlowManagerEQS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6a0554dafba8d58b4d777488bf0822d103fea11b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+58a611af107f52aadf8caf9ed35ccc9bc9834120")]
 [assembly: System.Reflection.AssemblyProductAttribute("CashFlowManagerEQS")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CashFlowManagerEQS")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
