@@ -1,0 +1,26 @@
+@model CashFlowManagerEQS.Models.Lancamento
+
+<h2>Deletar Lançamento</h2>
+
+<h3>Você deseja deletar este lançamento?</h3>
+
+<div>
+    <h4>Lançamento</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Descrição</dt>
+        <dd>@Model.Descricao</dd>
+        <dt>Valor</dt>
+        <dd>@Model.Valor</dd>
+        <dt>Tipo</dt>
+        <dd>@Model.Tipo</dd>
+        <dt>Data</dt>
+        <dd>@Model.Data.ToShortDateString()</dd>
+    </dl>
+    
+   <form asp-action="Deletar" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Deletar</button>
+        <a href="/Lancamentos" class="btn btn-primary">Cancelar</a>
+    </form>
+</div>

@@ -1,0 +1,16 @@
+@model CashFlowManagerEQS.Models.Lancamento
+
+
+<h2>Relatório Diário</h2>
+
+<form method="get" action="RelatorioDiario">
+    <div class="form-group">
+        <label for="data">Data:</label>
+        <input type="date" id="data" name="data" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+</form>
+
+<div>
+    <h3>@ViewData["Relatorio"]</h3>
+</div>

@@ -1,0 +1,34 @@
+@model IEnumerable<CashFlowManagerEQS.Models.Lancamento>
+
+<h2>Lançamentos</h2>
+
+<p>
+    <a href="/Lancamentos/Criar" class="btn btn-primary">Adicionar Novo Lançamento</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Descrição</th>
+            <th>Valor</th>
+            <th>Tipo</th>
+            <th>Data</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Descricao</td>
+                <td>@item.Valor</td>
+                <td>@item.Tipo</td>
+                <td>@item.Data.ToShortDateString()</td>
+                <td>
+                    <a href="/Lancamentos/Editar/@item.Id" class="btn btn-warning">Editar</a> |
+                    <a href="/Lancamentos/Deletar/@item.Id" class="btn btn-danger">Deletar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
