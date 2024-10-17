@@ -15,6 +15,41 @@ namespace CashFlowManagerEQS.Services
             _context = context;
         }
 
+        // Método para adicionar um novo lançamento
+        public async Task AdicionarLancamentoAsync(Lancamento lancamento)
+        {
+            _context.Lancamentos.Add(lancamento);
+            await _context.SaveChangesAsync();
+        }
+
+        // Método para gerar o relatório diário de lançamentos
+        public async Task<IEnumerable<Lancamento>> GerarRelatorioDiarioAsync(DateTime data)
+        {
+            return await _context.Lancamentos
+                .Where(l => l.Data.Date == data.Date)
+                .ToListAsync();
+        }
+
+        // Método para editar um lançamento existente
+        public async Task EditarLancamentoAsync(Lancamento lancamento)
+        {
+            var lancamentoExistente = await _context.Lancamentos.FindAsync(lancamento.Id);
+            if (lancamentoExistente != null)
+            {
+                lancamentoExistente.Descricao = lancamento.Descricao;
+                lancamentoExistente.Tipo = lancamento.Tipo;
+                lancamentoExistente.Valor = lancamento.Valor;
+                lancamentoExistente.Data = lancamento.Data;
+
+                _context.Lancamentos.Update(lancamentoExistente);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new KeyNotFoundException("Lançamento não encontrado.");
+            }
+        }
+
         // Criar um novo lançamento
         public async Task<bool> CriarLancamentoAsync(Lancamento lancamento)
         {
